@@ -1,0 +1,93 @@
+<template>
+		<lightning-card  title="LWC Editor">
+				<lightning-button label="New" slot="actions" variant="brand" onclick={handleNewLWC}></lightning-button>
+				<lightning-button label="Save" slot="actions" variant="success"  onclick={handleSaveLWC}></lightning-button>
+				
+				<div class="c-container">
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item padding="around-small" size="12">
+                    <lightning-layout>
+                        <lightning-layout-item padding="around-small" size="3">
+                            <div class="page-section page-right">
+                                <h2>Existing Components</h2>
+                                <template if:true={listLWCs}>
+																		<lightning-accordion class="example-accordion">
+																				<template for:each={listLWCs} for:item="bear" >
+																						<lightning-accordion-section name={bear.Id} label={bear.DeveloperName} key={bear.Id} onclick={loadResources}>
+																								<template if:true={listResources}>
+																										<template for:each={listResources} for:item="lr" >
+																												<span key={lr.Id}>
+																												<p id={lr.Id} onclick={loadSource}>{lr.FilePath}</p><br/>
+																												</span>
+																										</template>
+																								</template>
+																						</lightning-accordion-section>																						
+																				</template>
+																		</lightning-accordion>
+																		
+																</template>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="9">
+                            <div class="page-section page-main">
+                                <h2>Editor</h2><!--
+																<lightning-formatted-rich-text value={source}>
+																</lightning-formatted-rich-text>
+																123-->
+																<textarea id="codeContainer" name="codeContainer" rows="15" cols="100" onblur={updateSource}>
+																		{source}
+																</textarea><!--
+                                <lightning-input-rich-text value={source} formats={formats}>
+																		 <lightning-rich-text-toolbar-button-group slot="toolbar" aria-label="Save Button Group">
+																				<lightning-rich-text-toolbar-button
+																						icon-name="utility:save"
+																						icon-alternative-text="Save"
+																						onclick={handleSave}>
+																				</lightning-rich-text-toolbar-button>
+																		</lightning-rich-text-toolbar-button-group>
+																</lightning-input-rich-text>-->
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+								
+            </lightning-layout>
+        </div>
+		
+				<p slot="footer">Card Footer</p>
+		</lightning-card>
+		<template if:true={isModalOpen}>
+				<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Modal/PopUp Box header LWC</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+										<lightning-input type="text" label="Component name" onblur={sCompName}></lightning-input><br/>
+										<lightning-input type="checkbox" label="Include CSS file" name="cssOption" onchange={sCheckboxValue}></lightning-input><br/>
+										<lightning-input type="checkbox" label="Is Exposed?" name="exposedOption" onchange={sCheckboxValue}></lightning-input><br/>
+										<h2 class="header">Target</h2><br/>
+										<lightning-input type="checkbox" label="lightning__HomePage" name="lightning__HomePage" onchange={sCheckboxValue}></lightning-input><br/>
+										<lightning-input type="checkbox" label="lightning__RecordPage" name="lightning__RecordPage" onchange={sCheckboxValue}></lightning-input><br/>
+										<lightning-input type="checkbox" label="lightning__AppPage" name="lightning__AppPage" onchange={sCheckboxValue}></lightning-input><br/>
+										<lightning-input type="checkbox" label="lightning__Tab" name="lightning__Tab" onchange={sCheckboxValue}></lightning-input><br/>
+										
+								</div>
+								<footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={submitDetails} title="OK">OK</button>
+                </footer>
+						</div>
+				</section>
+				<div class="slds-backdrop slds-backdrop_open"></div>
+		</template>
+</template>
